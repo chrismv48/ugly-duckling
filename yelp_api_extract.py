@@ -5,6 +5,7 @@ from yelpapi import YelpAPI
 import datetime
 import pandas as pd
 from db_models import YelpAPIDb, session, convert_query_results
+from config import login_data
 
 
 def is_business_valid(business, zip_code):
@@ -20,7 +21,10 @@ CONSUMER_SECRET = "pTCBWQGroFhYGw1VTPnIm5n2Lhw"
 TOKEN = "rvhqz1zaN9yYQuIozUZ3g9mM8oMx8VeO"
 TOKEN_SECRET = "JRli3fU2nglxz9g3g3VxSNvu6YQ"
 
-yelp_api = YelpAPI(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET)
+yelp_api = YelpAPI(login_data['yelp_consumer_key'],
+                   login_data['yelp_consumer_secret'],
+                   login_data['yelp_token'],
+                   login_data['yelp_token_secret'])
 
 zip_codes_df = pd.read_csv("master_zip_code_list.csv")
 

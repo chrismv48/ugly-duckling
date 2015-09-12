@@ -5,7 +5,7 @@ import pandas as pd
 import datetime
 from sqlalchemy import extract
 from db_models import Indeed, session, convert_query_results
-
+from config import login_data
 
 def get_num_job_postings(zip_code, params=None):
     """Retrives the number of job postings for a zip_code, passing in additional optional parameters:
@@ -59,7 +59,7 @@ zip_codes_df = pd.read_csv("master_zip_code_list.csv")
 zip_codes_df['zip_code'] = zip_codes_df['zip_code'].astype(str)
 zip_codes_df['zip_code'] = zip_codes_df['zip_code'].apply(lambda x: '0' * (5 - len(x)) + x)
 
-client = IndeedClient(publisher=2777217772338190)
+client = IndeedClient(publisher=login_data['indeed_publisher_id'])
 
 current_month = datetime.date.today().month
 current_rows = session.query(Indeed).filter(extract('month', Indeed.date_published) == current_month).all()

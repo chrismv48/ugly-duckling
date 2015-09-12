@@ -1,28 +1,18 @@
-
 from db_models import Yelp, convert_query_results
-
-__author__ = 'carmstrong'
 
 import requests
 from lxml import etree
 import random
 import re
 import time
-import logging
 import pandas as pd
 import datetime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from multiprocessing.pool import ThreadPool
-
+from config import login_data
 from requests.exceptions import ConnectionError, ProxyError
 
-# logging.basicConfig(filename='yelp-scraping-log.log', format="%(asctime)s;%(levelname)s;%(message)s",
-#                               datefmt="%Y-%m-%d %H:%M:%S")
-# logging.getLogger().setLevel(logging.DEBUG)
-# requests_log = logging.getLogger("requests.packages.urllib3")
-# requests_log.setLevel(logging.DEBUG)
-# requests_log.propagate = True
 
 def generate_offsets(offset, increment, num_results):
     offsets = []
@@ -41,13 +31,13 @@ class YelpRequest(object):
         'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko',
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10; rv:33.0) Gecko/20100101 Firefox/33.0']
 
-    AUTH = requests.auth.HTTPProxyAuth('chrismv48', 'Dockside6')
+    AUTH = requests.auth.HTTPProxyAuth(login_data['proxymesh_username'], login_data['proxymesh_password'])
     PROXY_LIST = ['us-ca.proxymesh.com:31280',
                   'us-nv.proxymesh.com:31280',
                   'us-il.proxymesh.com:31280',
                   'us.proxymesh.com:31280',
                   'uk.proxymesh.com:31280']
-                  #'open.proxymesh.com:31280']
+    # 'open.proxymesh.com:31280']
     PROXIES = {'http': 'us-nv.proxymesh.com:31280'}
 
     EXCLUDED_IPS = []
@@ -72,7 +62,7 @@ class YelpRequest(object):
                                          proxies=self.proxies)
                 try:
                     self.ip_used = self.resp.headers['x-proxymesh-ip']
-                    #print "Using ip: {}" .format(self.ip_used)
+                    # print "Using ip: {}" .format(self.ip_used)
 
                 except KeyError:
                     print self.resp.headers
@@ -130,7 +120,8 @@ class YelpZipCode(object):
             bus_name = business_name_xpath[0].text
             bus_href = 'http://www.yelp.com/' + business_name_xpath[0].attrib['href']
 
-            business_review_xpath = business_result.xpath(".//span[@class='review-count rating-qualifier']", smart_strings=False)
+            business_review_xpath = business_result.xpath(".//span[@class='review-count rating-qualifier']",
+                                                          smart_strings=False)
             if business_review_xpath:
                 bus_reviews_count = int(re.sub('\D+', '', business_review_xpath[0].text))
             else:
@@ -146,8 +137,10 @@ class YelpZipCode(object):
         reviews = tree.xpath('//div[@class="review-content"]', smart_strings=False)
         review_data = []
         for review in reviews:
-            date_published = review.xpath('.//meta[@itemprop="datePublished"]', smart_strings=False)[0].attrib['content']
-            review_rating = float(review.xpath('.//meta[@itemprop="ratingValue"]', smart_strings=False)[0].attrib['content'])
+            date_published = review.xpath('.//meta[@itemprop="datePublished"]', smart_strings=False)[0].attrib[
+                'content']
+            review_rating = float(
+                review.xpath('.//meta[@itemprop="ratingValue"]', smart_strings=False)[0].attrib['content'])
             review_data.append({
                 "date_published": date_published,
                 "review_rating": review_rating})
@@ -239,5 +232,5 @@ for i, zip_code in enumerate(zip_batch):
                                                          run_time.seconds,
                                                          round(total_requests / run_time.seconds, 2))
     print "Zip code {} finished. Sleeping...\n".format(zip_code)
-    #time.sleep(52)
+    # time.sleep(52)
 print 'done'
