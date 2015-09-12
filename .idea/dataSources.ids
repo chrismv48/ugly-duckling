@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="yelp db" uuid="d2327546-b893-4933-b5c2-e7cd07b20d62">
+    <database-info product="SQLite" version="3.8.7" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
+    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
+    <schema name="" catalog=""/>
+    <table name="yelp_old" schema="" catalog="" type="TABLE">
+      <column name="date_published" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="num_reviews" sqlType="INTEGER" precision="2000000000" scale="10" nullable="true" jdbcType="4"/>
+      <column name="review_rating" sqlType="REAL" precision="2000000000" scale="10" nullable="true" jdbcType="6"/>
+      <column name="zip_code" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <index name="ix_yelp_date_published" unique="true" columns="date_published"/>
+    </table>
+  </data-source>
+</component>
