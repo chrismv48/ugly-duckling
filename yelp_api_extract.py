@@ -1,10 +1,11 @@
 """Script to get yelp data from their API"""
-from sqlalchemy import func, extract
-
-from yelpapi import YelpAPI
 import datetime
+
+from sqlalchemy import extract
+from yelpapi import YelpAPI
 import pandas as pd
-from db_models import YelpAPIDb, session, convert_query_results
+
+from models.db_models import YelpAPIDb, session, convert_query_results
 from config import login_data
 
 

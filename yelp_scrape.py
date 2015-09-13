@@ -1,17 +1,18 @@
-from db_models import Yelp, convert_query_results
-
-import requests
-from lxml import etree
 import random
 import re
 import time
-import pandas as pd
 import datetime
+from multiprocessing.pool import ThreadPool
+
+import requests
+from lxml import etree
+import pandas as pd
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from multiprocessing.pool import ThreadPool
-from config import login_data
 from requests.exceptions import ConnectionError, ProxyError
+
+from models.db_models import Yelp
+from config import login_data
 
 
 def generate_offsets(offset, increment, num_results):
