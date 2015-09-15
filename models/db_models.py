@@ -96,4 +96,17 @@ class ZillowMetrics(Base, SerializedModel):
             return field
 
 
+class BuildingPermit(Base, SerializedModel):
+    __table_args__ = {'schema': 'ugly_duckling'}
+    __bind_key__ = 'ugly_duckling'
+    __tablename__ = "building_permit"
+
+    month = Column(String, primary_key=True)
+    city = Column(String, primary_key=True)
+    state = Column(String, primary_key=True)
+    num_buildings = Column(Integer, default=0)
+    num_units = Column(Integer, default=0)
+    construction_cost = Column(Integer, default=0)
+
+
 create_tables()
