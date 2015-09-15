@@ -8,7 +8,9 @@ import requests
 from lxml import etree
 import pandas as pd
 from sqlalchemy.orm import sessionmaker
+
 from sqlalchemy import create_engine
+
 from requests.exceptions import ConnectionError, ProxyError
 
 from models.db_models import Yelp

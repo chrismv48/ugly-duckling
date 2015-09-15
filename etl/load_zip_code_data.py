@@ -64,7 +64,7 @@ def generate_zillow_dataframe(save_directory='zillow_csv_data/'):
 
 def persist_zillow_metrics(df):
     metrics_df = df.drop(['city', 'metro', 'state', 'county'], axis=1)
-    session.query(ZillowMetrics).delete()
+    session.query(ZillowMetrics).delete()  # TODO: should append to existing data in case zillow changes something
     session.commit()
     insert_chunk = 100000
     index_start = 0
@@ -78,7 +78,7 @@ def persist_zillow_metrics(df):
 
 def persist_zip_code_data(df):
     zip_code_labels_df = df[['zip_code', 'city', 'metro', 'state', 'county']].drop_duplicates()
-    session.query(ZipCode).delete()
+    session.query(ZipCode).delete()  #TODO: should append to existing data in case zillow changes something
     session.add_all([ZipCode(**row) for row in zip_code_labels_df.to_dict('records')])
     session.commit()
 
