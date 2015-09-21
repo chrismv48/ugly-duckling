@@ -4,9 +4,10 @@ from sqlalchemy import Column, String, Integer, Float, func, create_engine, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, validates
 
+from config import login_data
 from models.base import SerializedModel
 
-DB_LOCATION = "postgresql+psycopg2://carmstrong@localhost/ugly_duckling"
+DB_LOCATION = login_data.postgres_uri
 Base = declarative_base()
 engine = create_engine(DB_LOCATION)
 Session = sessionmaker(bind=engine)
