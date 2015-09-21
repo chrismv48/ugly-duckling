@@ -5,5 +5,6 @@
   "yelp_consumer_key": "B0yhNP32iAdWvyVPNGhnYQ",
   "yelp_consumer_secret": "pTCBWQGroFhYGw1VTPnIm5n2Lhw",
   "yelp_token": "rvhqz1zaN9yYQuIozUZ3g9mM8oMx8VeO",
-  "yelp_token_secret": "JRli3fU2nglxz9g3g3VxSNvu6YQ"
+  "yelp_token_secret": "JRli3fU2nglxz9g3g3VxSNvu6YQ",
+  "postgres_uri": "postgresql+psycopg2://carmstrong:Dockside6@104.131.106.228:5432/ugly_duckling"
 }

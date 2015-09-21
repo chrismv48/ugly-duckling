@@ -86,3 +86,7 @@ def main():
 
     session.add_all([BuildingPermit(**row) for row in results_array])
     session.commit()
+
+
+if __name__ == '__main__':
+    main()

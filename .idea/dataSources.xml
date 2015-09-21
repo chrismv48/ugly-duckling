@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3034857252">
-    <data-source source="LOCAL" name="yelp db" uuid="d2327546-b893-4933-b5c2-e7cd07b20d62">
-      <driver-ref>sqlite.xerial</driver-ref>
+  <component name="DataSourceManagerImpl" format="xml" hash="2388867904">
+    <data-source source="LOCAL" name="Ugly Duckling" uuid="e65dfa8f-70bd-48a3-bcbf-8048c5ee59d5">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/data_sources/yelp.db</jdbc-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://104.131.106.228:5432/ugly_duckling</jdbc-url>
       <libraries />
     </data-source>
   </component>

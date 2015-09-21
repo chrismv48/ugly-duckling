@@ -4,6 +4,8 @@ import pandas as pd
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
 
+from models.db_models import session, BuildingPermit, ZillowMetrics
+
 
 class Model(object):
     def __init__(self, sklearn_model):
@@ -81,3 +83,6 @@ lag_columns = ['building_permits', 'zillow_score']
 
 column_shifts = generate_column_shifts(lag_columns, range(max_lag))
 find_best_model(column_shifts, df, linear_model)
+
+building_permit_df = [row.as_dict() for row in session.query(BuildingPermit).all()]
+zillow_metrics_df = [row.as_dict() for row in session.query(ZillowMetrics).all()]

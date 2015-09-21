@@ -1,15 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="yelp db" uuid="d2327546-b893-4933-b5c2-e7cd07b20d62">
-    <database-info product="SQLite" version="3.8.7" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
-    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
-    <schema name="" catalog=""/>
-    <table name="yelp_old" schema="" catalog="" type="TABLE">
-      <column name="date_published" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
-      <column name="num_reviews" sqlType="INTEGER" precision="2000000000" scale="10" nullable="true" jdbcType="4"/>
-      <column name="review_rating" sqlType="REAL" precision="2000000000" scale="10" nullable="true" jdbcType="6"/>
-      <column name="zip_code" sqlType="TEXT" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
-      <index name="ix_yelp_date_published" unique="true" columns="date_published"/>
+  <data-source name="Ugly Duckling" uuid="e65dfa8f-70bd-48a3-bcbf-8048c5ee59d5">
+    <database-info product="PostgreSQL" version="9.3.8" jdbc-version="4.0" driver-name="PostgreSQL Native Driver" driver-version="PostgreSQL 9.3 JDBC4 (build 1100)">
+      <identifier-quote-string>&quot;</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact"/>
+    <schema name="ugly_duckling" catalog="ugly_duckling"/>
+    <table name="building_permit" schema="ugly_duckling" catalog="ugly_duckling" type="TABLE">
+      <column name="month" sqlType="varchar" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
+      <column name="city" sqlType="varchar" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
+      <column name="state" sqlType="varchar" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
+      <column name="num_buildings" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="num_units" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="construction_cost" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="building_permit_pkey" columns="month,city,state"/>
+    </table>
+    <table name="indeed" schema="ugly_duckling" catalog="ugly_duckling" type="TABLE">
+      <column name="zip_code" sqlType="varchar" precision="5" scale="0" nullable="false" jdbcType="12"/>
+      <column name="date_created" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
+      <column name="job_count" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="timestamp" sqlType="timestamp" precision="29" scale="6" nullable="true" jdbcType="93"/>
+      <primary-key name="indeed_pkey" columns="zip_code,date_created"/>
+    </table>
+    <table name="yelp" schema="ugly_duckling" catalog="ugly_duckling" type="TABLE">
+      <column name="zip_code" sqlType="varchar" precision="5" scale="0" nullable="false" jdbcType="12"/>
+      <column name="date_published" sqlType="varchar" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="num_reviews" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="review_rating" sqlType="float8" precision="17" scale="17" nullable="true" jdbcType="8"/>
+      <primary-key name="yelp_pkey" columns="zip_code,date_published"/>
+    </table>
+    <table name="yelp_api" schema="ugly_duckling" catalog="ugly_duckling" type="TABLE">
+      <column name="zip_code" sqlType="varchar" precision="5" scale="0" nullable="false" jdbcType="12"/>
+      <column name="date_created" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
+      <column name="business_count" sqlType="int4" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="avg_rating" sqlType="float4" precision="8" scale="8" nullable="true" jdbcType="7"/>
+      <column name="timestamp" sqlType="timestamp" precision="29" scale="6" nullable="true" jdbcType="93"/>
+      <primary-key name="yelp_api_pkey" columns="zip_code,date_created"/>
+    </table>
+    <table name="zillow_metrics" schema="ugly_duckling" catalog="ugly_duckling" type="TABLE">
+      <column name="zip_code" sqlType="varchar" precision="5" scale="0" nullable="false" jdbcType="12"/>
+      <column name="month" sqlType="varchar" precision="2147483647" scale="0" nullable="false" jdbcType="12"/>
+      <column name="ZHVI" sqlType="float8" precision="17" scale="17" nullable="true" jdbcType="8"/>
+      <column name="ZRI" sqlType="float8" precision="17" scale="17" nullable="true" jdbcType="8"/>
+      <column name="median_listing_price" sqlType="float8" precision="17" scale="17" nullable="true" jdbcType="8"/>
+      <column name="median_sales_price" sqlType="float8" precision="17" scale="17" nullable="true" jdbcType="8"/>
+      <primary-key name="zillow_metrics_pkey" columns="zip_code,month"/>
+    </table>
+    <table name="zip_code" schema="ugly_duckling" catalog="ugly_duckling" type="TABLE">
+      <column name="zip_code" sqlType="varchar" precision="5" scale="0" nullable="false" jdbcType="12"/>
+      <column name="city" sqlType="varchar" precision="2147483647" scale="0" nullable="true" jdbcType="12"/>
+      <column name="state" sqlType="varchar" precision="2" scale="0" nullable="true" jdbcType="12"/>
+      <column name="metro" sqlType="varchar" precision="2147483647" scale="0" nullable="true" jdbcType="12"/>
+      <column name="county" sqlType="varchar" precision="2147483647" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="zip_code_pkey" columns="zip_code"/>
     </table>
   </data-source>
 </component>

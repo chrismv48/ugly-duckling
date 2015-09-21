@@ -78,7 +78,7 @@ def persist_zillow_metrics(df):
 
 def persist_zip_code_data(df):
     zip_code_labels_df = df[['zip_code', 'city', 'metro', 'state', 'county']].drop_duplicates()
-    session.query(ZipCode).delete()  #TODO: should append to existing data in case zillow changes something
+    session.query(ZipCode).delete()  # TODO: should append to existing data in case zillow changes something
     session.add_all([ZipCode(**row) for row in zip_code_labels_df.to_dict('records')])
     session.commit()
 
