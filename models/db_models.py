@@ -25,8 +25,8 @@ class Yelp(Base, SerializedModel):
 
     zip_code = Column(String(5), primary_key=True)
     date_published = Column(String(10), primary_key=True)
-    num_reviews = Column(Integer)
-    review_rating = Column(Float)
+    num_reviews = Column(Integer, index=True)
+    review_rating = Column(Float, index=True)
 
 
 class Indeed(Base, SerializedModel):
@@ -36,7 +36,7 @@ class Indeed(Base, SerializedModel):
 
     zip_code = Column(String(5), primary_key=True)
     date_created = Column(Date, default=datetime.date.today(), primary_key=True)
-    job_count = Column(Integer)
+    job_count = Column(Integer, index=True)
     timestamp = Column(DateTime, default=func.now())
 
     def month(self):
@@ -50,8 +50,8 @@ class YelpAPIDb(Base, SerializedModel):
 
     zip_code = Column(String(5), primary_key=True)
     date_created = Column(Date, default=datetime.date.today(), primary_key=True)
-    business_count = Column(Integer)
-    avg_rating = Column(Float(precision=2))
+    business_count = Column(Integer, index=True)
+    avg_rating = Column(Float(precision=2), index=True)
     timestamp = Column(DateTime, default=func.now())
 
     def month(self):
@@ -64,10 +64,10 @@ class ZipCode(Base, SerializedModel):
     __tablename__ = "zip_code"
 
     zip_code = Column(String(5), primary_key=True)
-    city = Column(String)
-    state = Column(String(2))
-    metro = Column(String)
-    county = Column(String)
+    city = Column(String, index=True)
+    state = Column(String(2), index=True)
+    metro = Column(String, index=True)
+    county = Column(String, index=True)
 
     @validates('zip_code')
     def add_leading_zero(self, key, field):
@@ -84,10 +84,10 @@ class ZillowMetrics(Base, SerializedModel):
 
     zip_code = Column(String(5), primary_key=True)
     month = Column(String, primary_key=True)
-    ZHVI = Column(Float)
-    ZRI = Column(Float)
-    median_listing_price = Column(Float)
-    median_sales_price = Column(Float)
+    ZHVI = Column(Float, index=True)
+    ZRI = Column(Float, index=True)
+    median_listing_price = Column(Float, index=True)
+    median_sales_price = Column(Float, index=True)
 
     @validates('zip_code')
     def add_leading_zero(self, key, field):
@@ -105,9 +105,9 @@ class BuildingPermit(Base, SerializedModel):
     month = Column(String, primary_key=True)
     city = Column(String, primary_key=True)
     state = Column(String, primary_key=True)
-    num_buildings = Column(Integer, default=0)
-    num_units = Column(Integer, default=0)
-    construction_cost = Column(Integer, default=0)
+    num_buildings = Column(Integer, default=0, index=True)
+    num_units = Column(Integer, default=0, index=True)
+    construction_cost = Column(Integer, default=0, index=True)
 
 
 create_tables()

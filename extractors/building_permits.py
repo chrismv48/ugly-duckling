@@ -3,8 +3,10 @@ import itertools
 from multiprocessing.pool import ThreadPool
 
 import requests
+
 from bs4 import BeautifulSoup
 
+from config import LOGGER
 from models.db_models import session, BuildingPermit
 
 
@@ -78,13 +80,16 @@ def parse_results(results_list):
 
 
 def main():
-    post_data_list = generate_post_data((1, 12), (2005, 2014))
+    LOGGER.info('Extracting building permit data...')
+    post_data_list = generate_post_data((1, 12), (2005, 2015))
 
     pool = ThreadPool(5)
-    results = pool.map(get_census_reponse, post_data_list[:10])
+    results = pool.map(get_census_reponse, post_data_list)
     results_array = parse_results(results)
 
-    session.add_all([BuildingPermit(**row) for row in results_array])
+    for result in results_array:
+        session.merge(BuildingPermit(**result))
+
     session.commit()
 
 

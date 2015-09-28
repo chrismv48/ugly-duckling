@@ -1,10 +1,11 @@
 from itertools import product
+import random
 
 import pandas as pd
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
 
-from models.db_models import session, BuildingPermit, ZillowMetrics
+from models.db_models import session, ZillowMetrics
 
 
 class Model(object):
@@ -58,13 +59,13 @@ def generate_column_shifts(labels, shift_range):
     return list(product(*[[p for p in product(shift_range, [label])] for label in labels]))
 
 
-def find_best_model(column_shifts, df, model):
+def find_best_model(column_shifts, df, y_col, model):
     results = []
     for column_shift in column_shifts:
         model_df = df.copy()
         for column in column_shift:
             model_df[column[1]] = model_df[column[1]].shift(column[0])
-        model.add_data(model_df, y_col=['sale_price'])
+        model.add_data(model_df, y_col=[y_col])
         model.model_data()
         results.append({'shift': column_shift,
                         'RMSE': model.RMSE,
@@ -74,15 +75,29 @@ def find_best_model(column_shifts, df, model):
     return max(results, key=lambda x: x['Score'])
 
 
-linear_model = Model(linear_model.LinearRegression())
-df = pd.read_clipboard()
+# yelp_df = pd.DataFrame([row.as_dict() for row in session.query(Yelp).all()])
+# yelp_df = yelp_df.rename(columns={'date_published': 'month'})
+zillow_results = session.query(ZillowMetrics).filter(ZillowMetrics.ZRI != None, ZillowMetrics.ZHVI != None).all()
+
+zillow_metrics_df = pd.DataFrame([row.as_dict() for row in zillow_results])
+# merged_df = yelp_df.merge(zillow_metrics_df, on=['month', 'zip_code'])
+
+lin_model = Model(linear_model.LinearRegression())
 
 min_periods = 8
-max_lag = len(df) - min_periods
-lag_columns = ['building_permits', 'zillow_score']
+lag_columns = ['ZRI']
 
-column_shifts = generate_column_shifts(lag_columns, range(max_lag))
-find_best_model(column_shifts, df, linear_model)
+zip_code_sample = zillow_metrics_df.zip_code.unique()
+random.shuffle(zip_code_sample)
+zip_code_sample = zip_code_sample[:10]
 
-building_permit_df = [row.as_dict() for row in session.query(BuildingPermit).all()]
-zillow_metrics_df = [row.as_dict() for row in session.query(ZillowMetrics).all()]
+best_models = []
+for zip_code in zip_code_sample:
+    model_df = zillow_metrics_df[['median_sales_price', 'ZRI', 'month']][zillow_metrics_df['zip_code'] ==
+                                                                         zip_code].sort('month')
+    max_lag = len(model_df) - min_periods
+    column_shifts = generate_column_shifts(lag_columns, range(max_lag))
+    best_model = find_best_model(column_shifts, model_df[['median_sales_price', 'ZRI']], 'median_sales_price',
+                                 lin_model)
+    best_model['zip_code'] = zip_code
+    best_models.append(best_model)

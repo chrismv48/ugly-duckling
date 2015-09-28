@@ -10,6 +10,7 @@ from config import login_data, LOGGER
 
 client = IndeedClient(publisher=login_data['indeed_publisher_id'])
 
+
 def get_num_job_postings(zip_code, params=None):
     """Retrives the number of job postings for a zip_code, passing in additional optional parameters:
     {
@@ -65,19 +66,25 @@ def main():
     # zip_codes_df['zip_code'] = zip_codes_df['zip_code'].apply(lambda x: '0' * (5 - len(x)) + x)
 
     current_month = datetime.date.today().month
-    current_rows = session.query(Indeed).filter(extract('month', Indeed.date_published) == current_month).all()
+    current_rows = session.query(Indeed).filter(extract('month', Indeed.date_created) == current_month).all()
     current_rows = [row.as_dict() for row in current_rows]
     existing_zip_codes = [row['zip_code'] for row in current_rows]
     remaining_zip_codes = [zip_code for zip_code in zip_codes if zip_code not in existing_zip_codes]
+
     LOGGER.info('Found {} rows for current month: {}. Extracting {} remaining zip codes'.format(len(current_rows),
-                                                                                                current_month),
-                len(remaining_zip_codes))
+                                                                                                current_month,
+                                                                                                len(
+                                                                                                    remaining_zip_codes)))
 
     for i, zip_code in enumerate(remaining_zip_codes):
         job_count = get_num_job_postings(zip_code)
-        row = Indeed(zip_code=zip_code, job_count=job_count, date_published=datetime.date.today())
+        row = Indeed(zip_code=zip_code, job_count=job_count, date_created=datetime.date.today())
         session.merge(row)
         session.commit()
 
         LOGGER.info("Extracting zip code {} ({} of {})".format(zip_code, i, len(remaining_zip_codes)))
     session.close()
+
+
+if __name__ == '__main__':
+    main()

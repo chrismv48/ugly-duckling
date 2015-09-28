@@ -25,8 +25,8 @@ def main():
     zip_codes = [row.zip_code for row in session.query(ZipCode).all()]
 
     current_month = datetime.date.today().month
-    current_rows = session.query(YelpAPIDb).filter(extract('month', YelpAPIDb.date_extracted) == current_month).all()
-    current_rows = [row.as_dict for row in current_rows]
+    current_rows = session.query(YelpAPIDb).filter(extract('month', YelpAPIDb.date_created) == current_month).all()
+    current_rows = [row.as_dict() for row in current_rows]
     existing_zip_codes = [row['zip_code'] for row in current_rows]
     remaining_zip_codes = [zip_code for zip_code in zip_codes if zip_code not in existing_zip_codes]
 
@@ -59,7 +59,7 @@ def main():
                     print e
                     break
                 if search_results['total'] == 0:
-                    session.merge(YelpAPIDb(zip_code=zip_code, date_extracted=datetime.date.today(), avg_rating=None,
+                    session.merge(YelpAPIDb(zip_code=zip_code, date_created=datetime.date.today(), avg_rating=None,
                                             business_count=0))
                     session.commit()
                     break
@@ -78,13 +78,13 @@ def main():
             total_review_count = sum([business['review_count'] for business in zip_code_results])
             zip_code_avg_rating = sum(
                 [business['rating'] * business['review_count'] for business in zip_code_results]) / total_review_count
-            row = YelpAPIDb(zip_code=zip_code, date_extracted=datetime.date.today(), avg_rating=zip_code_avg_rating,
+            row = YelpAPIDb(zip_code=zip_code, date_created=datetime.date.today(), avg_rating=zip_code_avg_rating,
                             business_count=len(zip_code_results))
             session.merge(row)
             session.commit()
         else:
             session.merge(
-                YelpAPIDb(zip_code=zip_code, date_extracted=datetime.date.today(), avg_rating=None, business_count=0))
+                YelpAPIDb(zip_code=zip_code, date_created=datetime.date.today(), avg_rating=None, business_count=0))
             session.commit()
     session.close()
 
